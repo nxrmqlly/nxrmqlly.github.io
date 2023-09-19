@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;900&display=swap');
+
+@font-face {
+    font-family: Sinoreta;
+    src: url('../fonts/Sinoreta.otf');
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    background-color: #0a0327;
+    color: #fff;
+
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+::-moz-selection {
+    background: rgba(255, 255, 255, 0.30)
+}
+
+::selection {
+    background: rgba(255, 255, 255, 0.30)
+}
+
+
+.greeting-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.name {
+    font-weight: 500;
+    font-family: Sinoreta;
+    font-size: 84px;
+    margin: 0;
+
+    background: linear-gradient(135deg, #E46591, #ff9956);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+
+    animation: gradient 3s ease-in-out infinite;
+}
+
+.greet {
+    text-align: left;
+    font-weight: 300;
+    margin: 0;
+    font-size: 28px;
+}
+
+.alias {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 100;
+    margin: 0;
+    font-size: 18px;
+    text-align: right;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
