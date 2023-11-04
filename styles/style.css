@@ -53,7 +53,7 @@ body {
 .name {
     font-weight: 500;
     font-family: Sinoreta;
-    font-size: 84px;
+    font-size: 5rem;
     margin: 0;
 
     background: linear-gradient(135deg, #E46591, #ff9956);
@@ -69,14 +69,14 @@ body {
     text-align: left;
     font-weight: 300;
     margin: 0;
-    font-size: 28px;
+    font-size: 2rem;
 }
 
 .alias {
     color: rgba(255, 255, 255, 0.7);
     font-weight: 100;
     margin: 0;
-    font-size: 18px;
+    font-size: 1.2rem;
     text-align: right;
 }
 
@@ -91,5 +91,61 @@ body {
 
     100% {
         background-position: 0% 50%;
+    }
+}
+
+@media (width<=600px) {
+    .name {
+        font-size: 3.4rem;
+    }
+
+    .greet {
+        font-size: 1.3rem
+    }
+
+    .alias {
+        font-size: 0.8rem;
+    }
+}
+
+@media (600px <=width <=768px) {
+    .name {
+        font-size: 4.1rem;
+    }
+
+    .greet {
+        font-size: 1.5rem
+    }
+
+    .alias {
+        font-size: 1rem;
+    }
+}
+
+@media (768px<=width<=992px) {
+    .name {
+        font-size: 4.7rem;
+    }
+
+    .greet {
+        font-size: 1.8rem
+    }
+
+    .alias {
+        font-size: 1.15rem;
+    }
+}
+
+@media (1200px<=width<=1200px) {
+    .name {
+        font-size: 4.7rem;
+    }
+
+    .greet {
+        font-size: 1.9rem
+    }
+
+    .alias {
+        font-size: 1.9rem;
     }
 }
