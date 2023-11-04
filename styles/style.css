@@ -15,7 +15,7 @@
 
 html,
 body {
-    background-color: #0a0327;
+    background-color: #08021e;
     color: #fff;
 
     font-family: 'Montserrat', sans-serif;
@@ -56,7 +56,7 @@ body {
     font-size: 5rem;
     margin: 0;
 
-    background: linear-gradient(135deg, #E46591, #ff9956);
+    background: linear-gradient(90deg, #ed2e57, #faa930);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
