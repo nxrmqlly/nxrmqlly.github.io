@@ -1,0 +1,69 @@
+:root {
+    --bg-color: #1a1a1a;
+    --fg-color: #fff;
+    --lines-opacity: 0.3;
+
+
+    --purple: #772df7;
+    --pink: #f15d85;
+    --orange: #f79926;
+    --green: #65c06f;
+    --blue: #6f92e2;
+
+    --acc-gradient: linear-gradient(45deg, var(--orange) 30%, var(--pink), var(--purple) 70%);
+    --acc-gradient-anim: text-shine 10s infinite ease-in-out;
+
+    --tri-gradient: linear-gradient(90deg, var(--orange) 30%, var(--fg-color) 50%, var(--green) 100%);
+}
+
+.about {
+    text-align: center;
+}
+
+.about * {
+    transition: all 0.5s;
+    transition-delay: 0ms;
+}
+
+.inner-about {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* padding-top: 5rem; */
+    cursor: pointer;
+    /* overflow: hidden; */
+}
+
+.about .quote {
+    font-size: 200%;
+}
+
+.about .inner-about:hover .quote {
+    font-size: 210%;
+    letter-spacing: 0.2rem;
+    transform: translateY(-50%);
+
+}
+
+.info-card p {
+    font-size: 120%;
+}
+
+.info-card {
+    display: block;
+    position: absolute;
+    padding-top: 2rem;
+    opacity: 0;
+    max-width: 35dvw;
+    transition: all 0.5s;
+    filter: blur(10px);
+}
+
+
+.inner-about:hover .info-card {
+    display: block;
+    opacity: 1;
+    transform: translateY(50%);
+    filter: blur(0);
+}
