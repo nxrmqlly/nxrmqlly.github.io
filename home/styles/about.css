@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'EntezareZohoor2';
+    src: url('../assets/fonts/Kids\ Year.ttf') format('truetype');
+}
+
 :root {
     --bg-color: #1a1a1a;
     --fg-color: #fff;
@@ -32,17 +37,23 @@
     flex-direction: column;
     /* padding-top: 5rem; */
     cursor: pointer;
+    /* background-color: #65c06f; */
     /* overflow: hidden; */
+}
+
+.inner-about:hover {
+    padding-top: 2rem;
 }
 
 .about .quote {
     font-size: 200%;
 }
 
-.about .inner-about:hover .quote {
+.inner-about:hover .quote {
+    padding-top: 2rem;
     font-size: 210%;
-    letter-spacing: 0.2rem;
-    transform: translateY(-50%);
+    letter-spacing: 0.3rem;
+    transform: translateY(-90%);
 
 }
 
@@ -55,7 +66,7 @@
     position: absolute;
     padding-top: 2rem;
     opacity: 0;
-    max-width: 35dvw;
+    max-width: 45dvw;
     transition: all 0.5s;
     filter: blur(10px);
 }
@@ -64,6 +75,90 @@
 .inner-about:hover .info-card {
     display: block;
     opacity: 1;
-    transform: translateY(50%);
+    transform: translateY(30%);
     filter: blur(0);
+}
+
+.about .hover-indicator {
+    position: relative;
+    top: -6rem;
+    left: 30rem;
+    width: 0;
+    height: 0;
+
+}
+
+.indicator-arrow {
+    position: relative;
+    top: 2rem;
+    left: -3rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    rotate: -210deg;
+}
+
+.indicator {
+    top: -4rem;
+    left: 1rem;
+    position: relative;
+    max-width: 5rem;
+
+    font-size: 150%;
+    rotate: 20deg;
+    font-family: 'Kids Year', 'Comic sans';
+    display: block;
+}
+
+.mobile-indicator {
+    position: relative;
+    display: none;
+}
+
+
+
+@media (width<=600px) {
+    .indicator-arrow {
+        left: -2rem;
+    }
+
+    .about .hover-indicator {
+        top: -6rem;
+        left: 6rem;
+
+    }
+
+    .mobile-indicator {
+        top: -4rem;
+        left: 2rem;
+
+        max-width: 5rem;
+        font-size: 150%;
+        rotate: 20deg;
+        font-family: 'Kids Year', 'Comic sans';
+        display: block;
+    }
+
+    .indicator {
+        display: none;
+    }
+
+
+    .inner-about:hover .quote {
+        padding-top: 2rem;
+        font-size: 140%;
+        transform: translateY(-90%);
+        max-width: 90dvw;
+
+    }
+
+    .inner-about .quote {
+        font-size: 130%;
+        max-width: 80dvw;
+    }
+
+    .info-card {
+        display: block;
+        max-width: 80vw;
+        font-size: 90%;
+    }
 }

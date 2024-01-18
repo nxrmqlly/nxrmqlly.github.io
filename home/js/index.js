@@ -32,12 +32,16 @@ yHiddenElements.forEach((element) => {
 })
 
 const themeIcon = document.querySelector('#theme-icon');
+const indicatorArrow = document.querySelector('.indicator-arrow');
 
 themeIcon.onclick = () => {
     document.body.classList.toggle('ui-light-theme');
     if (document.body.classList.contains('ui-light-theme')) {
         themeIcon.innerHTML = '💡';
+        indicatorArrow.setAttribute("data", "./assets/hand-drawn-arrow-black.svg");
     } else {
         themeIcon.innerHTML = '🌙';
+        indicatorArrow.setAttribute("data", "./assets/hand-drawn-arrow.svg");
+
     }
 }
