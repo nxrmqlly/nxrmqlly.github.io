@@ -76,6 +76,7 @@ body {
     justify-content: space-between;
     align-items: center;
     z-index: 10;
+    flex-direction: row;
 }
 
 
@@ -243,6 +244,7 @@ section {
 @media (width<=600px) {
     .header {
         padding: 10px 20px;
+        flex-direction: column;
     }
 
     .nav-name {
