@@ -86,6 +86,7 @@
     width: 0;
     height: 0;
 
+
 }
 
 .indicator-arrow {
@@ -95,6 +96,7 @@
     width: 4.5rem;
     height: 4.5rem;
     rotate: -210deg;
+    stroke-width: 50rem;
 }
 
 .indicator {
@@ -140,6 +142,85 @@
 
     .indicator {
         display: none;
+    }
+
+
+    .inner-about:hover .quote {
+        padding-top: 2rem;
+        font-size: 140%;
+        transform: translateY(-90%);
+        max-width: 90dvw;
+
+    }
+
+    .inner-about .quote {
+        font-size: 130%;
+        max-width: 80dvw;
+    }
+
+    .info-card {
+        display: block;
+        max-width: 80vw;
+        font-size: 90%;
+    }
+}
+
+@media (600px <=width <=768px) {
+    .indicator-arrow {
+        left: -2rem;
+    }
+
+    .about .hover-indicator {
+        top: -6rem;
+        left: 13rem;
+
+    }
+
+    .mobile-indicator {
+        top: -4rem;
+        left: 2rem;
+
+        max-width: 5rem;
+        font-size: 150%;
+        rotate: 20deg;
+        font-family: 'Kids Year', 'Comic sans';
+        display: block;
+    }
+
+    .indicator {
+        display: none;
+    }
+
+
+    .inner-about:hover .quote {
+        padding-top: 2rem;
+        font-size: 140%;
+        transform: translateY(-90%);
+        max-width: 90dvw;
+
+    }
+
+    .inner-about .quote {
+        font-size: 130%;
+        max-width: 80dvw;
+    }
+
+    .info-card {
+        display: block;
+        max-width: 80vw;
+        font-size: 90%;
+    }
+}
+
+@media (768px<=width<=1200px) {
+    .indicator-arrow {
+        left: -2rem;
+    }
+
+    .about .hover-indicator {
+        top: -6rem;
+        left: 15rem;
+
     }
 
 

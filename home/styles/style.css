@@ -294,10 +294,10 @@ section {
 
 }
 
+@media (1200px<=width<=1200px) {}
+
 @media (prefers-reduced-motion) {
     * {
         transition: none;
     }
 }
-
-@media (1200px<=width<=1200px) {}

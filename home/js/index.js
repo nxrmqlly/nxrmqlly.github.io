@@ -32,16 +32,26 @@ yHiddenElements.forEach((element) => {
 })
 
 const themeIcon = document.querySelector('#theme-icon');
+
 const indicatorArrow = document.querySelector('.indicator-arrow');
+
+
+const smoothenArrow = () => {
+    indicatorArrow.style.setProperty("opacity", "0");
+
+    sleep(1500).then(() => {
+        indicatorArrow.style.setProperty("opacity", "1");
+    })
+}
 
 themeIcon.onclick = () => {
     document.body.classList.toggle('ui-light-theme');
     if (document.body.classList.contains('ui-light-theme')) {
         themeIcon.innerHTML = '💡';
-        indicatorArrow.setAttribute("data", "./assets/hand-drawn-arrow-black.svg");
+        smoothenArrow()
     } else {
         themeIcon.innerHTML = '🌙';
-        indicatorArrow.setAttribute("data", "./assets/hand-drawn-arrow.svg");
+        smoothenArrow()
 
     }
 }
