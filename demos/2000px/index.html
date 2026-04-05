@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPLITVISION</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --accent: #00ffcc;
+            --accent2: #ff2d55;
+            --text: #e0e0e0;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Share Tech Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #1a1a1a;
+            background: #0d0d0d;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.9rem;
+            letter-spacing: 0.18em;
+            color: var(--accent);
+            text-shadow: 0 0 18px rgba(0, 255, 204, 0.35);
+        }
+
+        .logo span {
+            color: var(--accent2);
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.7rem;
+            color: #555;
+            letter-spacing: 0.08em;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #333;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .dot.live {
+            background: var(--accent2);
+            box-shadow: 0 0 8px var(--accent2);
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.35
+            }
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 16px;
+            gap: 20px;
+        }
+
+        .viewport-wrapper {
+            position: relative;
+            width: min(420px, 90vw);
+            aspect-ratio: 720 / 1080;
+            background: #000;
+            border: 1px solid #1e1e1e;
+            box-shadow: 0 0 50px rgba(0, 255, 204, 0.06);
+            overflow: hidden;
+        }
+
+        #outputCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: pixelated;
+        }
+
+        .divider-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            transform: translateX(-50%);
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .label {
+            position: absolute;
+            top: 12px;
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            padding: 3px 9px;
+            pointer-events: none;
+            z-index: 11;
+            border-radius: 2px;
+        }
+
+        .label-left {
+            left: 8px;
+            color: var(--accent);
+            background: rgba(0, 255, 204, 0.08);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .label-right {
+            right: 8px;
+            color: var(--accent2);
+            background: rgba(255, 45, 85, 0.08);
+            border: 1px solid rgba(255, 45, 85, 0.2);
+        }
+
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(to bottom,
+                    transparent, transparent 2px,
+                    rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px);
+            pointer-events: none;
+            z-index: 9;
+        }
+
+        .corner {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--accent);
+            border-style: solid;
+            pointer-events: none;
+            z-index: 12;
+            opacity: 0.6;
+        }
+
+        .corner.tl {
+            top: 0;
+            left: 0;
+            border-width: 2px 0 0 2px;
+        }
+
+        .corner.tr {
+            top: 0;
+            right: 0;
+            border-width: 2px 2px 0 0;
+        }
+
+        .corner.bl {
+            bottom: 0;
+            left: 0;
+            border-width: 0 0 2px 2px;
+        }
+
+        .corner.br {
+            bottom: 0;
+            right: 0;
+            border-width: 0 2px 2px 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+            padding: 10px 26px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            border-radius: 2px;
+            text-transform: uppercase;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+        }
+
+        .btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 16px rgba(0, 255, 204, 0.28);
+        }
+
+        .btn.stop {
+            border-color: var(--accent2);
+            color: var(--accent2);
+        }
+
+        .btn.stop:hover {
+            background: var(--accent2);
+            color: #fff;
+            box-shadow: 0 0 16px rgba(255, 45, 85, 0.28);
+        }
+
+        .btn:disabled {
+            opacity: 0.28;
+            pointer-events: none;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 0.07em;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 110px;
+            height: 2px;
+            background: #2a2a2a;
+            outline: none;
+            border-radius: 2px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--accent2);
+            cursor: pointer;
+            box-shadow: 0 0 6px var(--accent2);
+        }
+
+        #pixelLabel {
+            color: var(--accent2);
+            min-width: 28px;
+        }
+
+        .info {
+            font-size: 0.64rem;
+            color: #3a3a3a;
+            letter-spacing: 0.07em;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .info span {
+            color: #555;
+        }
+
+        #errorMsg {
+            display: none;
+            color: var(--accent2);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 45, 85, 0.3);
+            background: rgba(255, 45, 85, 0.06);
+            border-radius: 2px;
+            max-width: 360px;
+            text-align: center;
+        }
+
+        footer {
+            width: 100%;
+            padding: 12px 28px;
+            border-top: 1px solid #141414;
+            font-size: 0.6rem;
+            color: #2e2e2e;
+            letter-spacing: 0.1em;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #sourceVideo,
+        #srcCanvas,
+        #pixCanvas {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">SPLIT<span>VISION</span></div>
+        <div class="status-bar">
+            <div class="dot" id="dotEl"></div>
+            <span id="statusText">OFFLINE</span>
+            <span>|</span>
+            <span>720x1080</span>
+        </div>
+    </header>
+
+    <div class="main">
+        <div id="errorMsg"></div>
+
+        <!-- Hidden: camera source -->
+        <video id="sourceVideo" autoplay playsinline muted></video>
+        <!-- Hidden: full-res normalised frame -->
+        <canvas id="srcCanvas"></canvas>
+        <!-- Hidden: tiny canvas for pixelation downscale -->
+        <canvas id="pixCanvas"></canvas>
+
+        <div class="viewport-wrapper">
+            <canvas id="outputCanvas" width="720" height="1080"></canvas>
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="startBtn" onclick="startCamera()">▶ START CAMERA</button>
+            <button class="btn stop" id="stopBtn" onclick="stopCamera()" disabled>■ STOP</button>
+            <div class="slider-group">
+                <span>PIXEL SIZE</span>
+                <input type="range" id="pixelSlider" min="2" max="40" value="10"
+                    oninput="document.getElementById('pixelLabel').textContent=this.value">
+                <span id="pixelLabel">10</span>
+            </div>
+        </div>
+
+        <div class="info">
+            INPUT <span>720x1080</span> -> BOTH HALVES SQUISHED TO <span>360x1080</span><br>
+            LEFT <span>PIXELATED</span> &nbsp;·&nbsp; RIGHT <span>NORMAL</span> &nbsp;·&nbsp; OUTPUT
+            <span>720x1080</span>
+        </div>
+    </div>
+
+    <footer>
+        <span>SPLITVISION // REALTIME DUAL-MODE FEED</span>
+        <span id="fpsEl">FPS: --</span>
+    </footer>
+
+    <script>
+    const video = document.getElementById('sourceVideo');
+    const srcCanvas = document.getElementById('srcCanvas');
+    const pixCanvas = document.getElementById('pixCanvas');
+    const outCanvas = document.getElementById('outputCanvas');
+    const srcCtx = srcCanvas.getContext('2d');
+    const pixCtx = pixCanvas.getContext('2d');
+    const outCtx = outCanvas.getContext('2d');
+
+
+    const OUT_W = 720, OUT_H = 1080, HALF = 360;
+
+    let stream = null, animId = null, fCount = 0, lastT = 0;
+
+    async function startCamera() {
+      const err = document.getElementById('errorMsg');
+      err.style.display = 'none';
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 720 },
+            height: { ideal: 1280 },
+            aspectRatio: { ideal: 9 / 16 },
+            facingMode: 'user'
+          },
+          audio: false
+        });
+        video.srcObject = stream;
+        await video.play();
+
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('stopBtn').disabled = false;
+        document.getElementById('dotEl').classList.add('live');
+        document.getElementById('statusText').textContent = 'LIVE';
+
+        render();
+      } catch (e) {
+        err.style.display = 'block';
+        err.textContent = '⚠ CAMERA ERROR — ' + e.message.toUpperCase();
+      }
+    }
+
+    function stopCamera() {
+      if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+      video.srcObject = null;
+      outCtx.fillStyle = '#000';
+      outCtx.fillRect(0, 0, OUT_W, OUT_H);
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('stopBtn').disabled = true;
+      document.getElementById('dotEl').classList.remove('live');
+      document.getElementById('statusText').textContent = 'OFFLINE';
+      document.getElementById('fpsEl').textContent = 'FPS: --';
+    }
+
+    // todo: fix this ugly filter
+    // ── filter ────
+
+    function applyRioFilter(ctx, w, h) {
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const d = imageData.data;
+
+      for (let i = 0; i < d.length; i += 4) {
+        let r = d[i], g = d[i + 1], b = d[i + 2];
+
+        // brightness +20
+        r = Math.min(255, r + 20);
+        g = Math.min(255, g + 16);
+        b = Math.min(255, b + 10);
+
+        // Contrast boost (pull toward extremes, pivot at 128)
+        // Thanks claude
+        const C = 1.18;
+        r = Math.min(255, Math.max(0, C * (r - 128) + 128));
+        g = Math.min(255, Math.max(0, C * (g - 128) + 128));
+        b = Math.min(255, Math.max(0, C * (b - 128) + 128));
+
+        // Pink Tint (Thanks Claude)
+        r = Math.min(255, r * 1.12 + 18);   // warm orange-red push
+        g = Math.min(255, g * 0.88 + 4);    // slight green rolloff
+        b = Math.min(255, b * 1.08 + 22);   // purple-pink lift in blues
+
+
+        const sepiaR = (r * 0.393 + g * 0.769 + b * 0.189);
+        const sepiaG = (r * 0.349 + g * 0.686 + b * 0.168);
+        const sepiaB = (r * 0.272 + g * 0.534 + b * 0.131);
+
+        const blend = 0.28; // 28% sepia blend
+        r = Math.min(255, r * (1 - blend) + sepiaR * blend);
+        g = Math.min(255, g * (1 - blend) + sepiaG * blend);
+        b = Math.min(255, b * (1 - blend) + sepiaB * blend);
+
+        // final overlay
+        r = Math.min(255, r + 12);
+        b = Math.min(255, b + 8);
+
+        d[i] = r;
+        d[i + 1] = g;
+        d[i + 2] = b;
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    function render(ts = 0) {
+      animId = requestAnimationFrame(render);
+      if (!video.videoWidth) return;
+
+      // normalise camera feed
+      srcCanvas.width = OUT_W;
+      srcCanvas.height = OUT_H;
+      const vW = video.videoWidth, vH = video.videoHeight;
+      const camAR = vW / vH, outAR = OUT_W / OUT_H;
+      let dW, dH, dx = 0, dy = 0;
+      if (camAR > outAR) {
+        dH = OUT_H; dW = vW * (OUT_H / vH); dx = (OUT_W - dW) / 2;
+      } else {
+        dW = OUT_W; dH = vH * (OUT_W / vW); dy = (OUT_H - dH) / 2;
+      }
+      srcCtx.drawImage(video, dx, dy, dW, dH);
+
+      // RIGHT HALF :: 360x1080 no pixelation
+      outCtx.imageSmoothingEnabled = true;
+      outCtx.imageSmoothingQuality = 'high';
+      outCtx.drawImage(
+        srcCanvas,
+        0, 0, OUT_W, OUT_H,   // src: full 720x1080
+        HALF, 0, HALF, OUT_H  // dst: right 360x1080
+      );
+
+      // LEFT HALF :: scale up blocky -> 360x1080
+      const blockSize = parseInt(document.getElementById('pixelSlider').value, 10);
+      const smallW = Math.max(1, Math.floor(HALF / blockSize));
+      const smallH = Math.max(1, Math.floor(OUT_H / blockSize));
+
+      pixCanvas.width = smallW;
+      pixCanvas.height = smallH;
+
+      pixCtx.imageSmoothingEnabled = true;
+      pixCtx.drawImage(srcCanvas, 0, 0, OUT_W, OUT_H, 0, 0, smallW, smallH);
+
+      // Upscale tiny 
+      outCtx.imageSmoothingEnabled = false;
+      outCtx.drawImage(
+        pixCanvas,
+        0, 0, smallW, smallH,  // src: tiny
+        0, 0, HALF, OUT_H      // dst: left 360x1080
+      );
+
+
+      applyRioFilter(outCtx, OUT_W, OUT_H);
+      fCount++;
+      if (ts - lastT >= 1000) {
+        document.getElementById('fpsEl').textContent = 'FPS: ' + fCount;
+        fCount = 0; lastT = ts;
+      }
+    }
+    </script>
+</body>
+
+</html>
